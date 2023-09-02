@@ -7,18 +7,19 @@ const express_1 = require("express");
 const albums_controller_1 = __importDefault(require("../controllers/albums.controller"));
 class AlbumsRoutes {
     router = (0, express_1.Router)();
+    controller = new albums_controller_1.default();
     constructor() {
         this.initRoutes();
     }
     initRoutes() {
-        this.router.get('/', albums_controller_1.default.getMany);
-        this.router.get('/:artistName', albums_controller_1.default.getManyByArtist);
-        this.router.get('/:albumName', albums_controller_1.default.getManyByName);
-        this.router.get('/:catalogNumber', albums_controller_1.default.getOne);
-        this.router.post('/', albums_controller_1.default.create);
-        this.router.put('/:catalogNumber', albums_controller_1.default.update);
-        this.router.delete('/:catalogNumber', albums_controller_1.default.deleteOne);
-        this.router.delete('/', albums_controller_1.default.deleteMany);
+        this.router.get('/', this.controller.getMany);
+        this.router.get('/:artistName', this.controller.getManyByArtist);
+        this.router.get('/:albumName', this.controller.getManyByName);
+        this.router.get('/:catalogNumber', this.controller.getOne);
+        this.router.post('/', this.controller.create);
+        this.router.put('/:catalogNumber', this.controller.update);
+        this.router.delete('/:catalogNumber', this.controller.deleteOne);
+        this.router.delete('/', this.controller.deleteMany);
     }
 }
 exports.default = new AlbumsRoutes().router;

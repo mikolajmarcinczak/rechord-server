@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 import { Request, Response } from 'express';
-import { Errors } from 'utility/dberrors';
-import { assertIsError } from 'utility/error.guard';
+import { Errors } from '../src/utility/dberrors';
+import { assertIsError } from '../src/utility/error.guard';
 
 const prisma = new PrismaClient();
 
@@ -60,7 +60,7 @@ export async function getManyAlbums(req: Request, res: Response) {
 }
 
 export async function getAlbumsByArtist(req: Request, res: Response) {
-    const artistName = req.body.artistName;
+    const artistName = req.query.artistName;
 
     if (artistName === "" || typeof artistName !== "string") {
         return Errors.badRequest(res, 'album');

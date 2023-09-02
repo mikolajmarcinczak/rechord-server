@@ -1,4 +1,4 @@
-import "utility/paths";
+import "./src/utility/paths";
 import type {Application} from "express";
 import Server from "./src/index";
 import express from "express";
