@@ -103,7 +103,7 @@ class AlbumsController {
     //endregion
     //region Post
     async create(req, res) {
-        if (!req.body.catalogNumber) {
+        if (!req.body.catalog_number) {
             return dberrors_1.Errors.badRequest(res, 'album');
         }
         const albumBody = req.body;

@@ -12,9 +12,10 @@ class AlbumsRoutes {
         this.initRoutes();
     }
     initRoutes() {
-        this.router.get('/', this.controller.getMany);
+        //TODO: do wyniesienia do Artist.Routes
         this.router.get('/:artistName', this.controller.getManyByArtist);
-        this.router.get('/:albumName', this.controller.getManyByName);
+        this.router.get('/', this.controller.getMany);
+        this.router.get('/?albumName', this.controller.getManyByName);
         this.router.get('/:catalogNumber', this.controller.getOne);
         this.router.post('/', this.controller.create);
         this.router.put('/:catalogNumber', this.controller.update);

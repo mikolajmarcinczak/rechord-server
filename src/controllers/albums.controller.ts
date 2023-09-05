@@ -30,7 +30,7 @@ export default class AlbumsController {
 	}
 
 	async getManyByName(req: Request, res: Response) {
-		const albumName = req.query.albumName;
+		const albumName = req.query.albumName as string;
 
 		if (albumName === "") {
 			try {
@@ -62,7 +62,7 @@ export default class AlbumsController {
 	}
 
 	async getManyByArtist(req: Request, res: Response) {
-		const artistName = req.query.artistName;
+		const artistName = req.query.artistName as string;
 
 		if (artistName === "" || typeof artistName !== "string") {
 			return Errors.badRequest(res, 'album');
@@ -110,7 +110,7 @@ export default class AlbumsController {
 
 	//region Post
 	async create(req: Request, res: Response){
-		if (!req.body.catalogNumber){
+		if (!req.body.catalog_number){
 			return Errors.badRequest(res, 'album');
 		}
 
