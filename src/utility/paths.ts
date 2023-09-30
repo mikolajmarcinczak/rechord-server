@@ -3,8 +3,8 @@ import {addAliases} from 'module-alias';
 
 addAliases({
 	'@': `${__dirname}/src`,
-	'@controllers': `${__dirname}/controllers`,
+	'@controllers': `${__dirname}/src/controllers`,
 	'@models': `${__dirname}/../../rechord-common/models`,
-	'@utility': `${__dirname}/utility`,
-	'@routes': `${__dirname}/routes`,
+	'@utility': `${__dirname}/src/utility`,
+	'@routes': `${__dirname}/src/routes`,
 });

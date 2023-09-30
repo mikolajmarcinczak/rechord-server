@@ -6,7 +6,7 @@ class AlbumsRoutes implements IRoutes {
 	router = Router();
 
 	constructor() {
-		this.initRoutes();
+		//this.initRoutes();
 	}
 
 	initRoutes()
