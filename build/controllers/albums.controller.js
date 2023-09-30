@@ -1,26 +1,180 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const get_manyAlbums_1 = require("./albums/get.manyAlbums");
-const get_album_1 = require("./albums/get.album");
-const post_album_1 = require("./albums/post.album");
-const put_updateAlbum_1 = require("./albums/put.updateAlbum");
-const delete_album_1 = require("./albums/delete.album");
-const delete_manyAlbums_1 = require("./albums/delete.manyAlbums");
+const client_1 = require("@prisma/client");
+const dberrors_1 = require("../utility/dberrors");
+const error_guard_1 = require("../utility/error.guard");
+const prisma = new client_1.PrismaClient();
 class AlbumsController {
     //region Get
-    static getMany = get_manyAlbums_1.getAlbumsByName;
-    static getManyByName = get_manyAlbums_1.getManyAlbums;
-    static getManyByArtist = get_manyAlbums_1.getAlbumsByArtist;
-    static getOne = get_album_1.getAlbum;
+    async getMany(req, res) {
+        const catalogNumbers = req.query.catalogNumbers;
+        if (!Array.isArray(catalogNumbers)) {
+            return dberrors_1.Errors.badRequest(res, 'album');
+        }
+        try {
+            const albums = await prisma.album.findMany({
+                where: {
+                    catalog_number: {
+                        in: catalogNumbers
+                    }
+                }
+            });
+            res.send({ message: "Albums retrieved successfully", albums });
+        }
+        catch (error) {
+            (0, error_guard_1.assertIsError)(error);
+            return dberrors_1.Errors.couldNotRetrieve(res, 'album', error);
+        }
+    }
+    async getManyByName(req, res) {
+        const albumName = req.query.albumName;
+        if (albumName === "") {
+            try {
+                const albums = await prisma.album.findMany();
+                res.send({ message: "Albums retrieved successfully", albums });
+            }
+            catch (error) {
+                (0, error_guard_1.assertIsError)(error);
+                return dberrors_1.Errors.couldNotRetrieve(res, 'album', error);
+            }
+        }
+        else if (typeof albumName !== "string") {
+            return dberrors_1.Errors.badRequest(res, 'album');
+        }
+        else {
+            try {
+                const albums = await prisma.album.findMany({
+                    where: {
+                        album_name: {
+                            contains: albumName
+                        }
+                    }
+                });
+                res.send({ message: `Albums with name '${albumName}' retrieved successfully`, albums });
+            }
+            catch (error) {
+                (0, error_guard_1.assertIsError)(error);
+                return dberrors_1.Errors.couldNotRetrieve(res, 'album', error);
+            }
+        }
+    }
+    async getManyByArtist(req, res) {
+        const artistName = req.query.artistName;
+        if (artistName === "" || typeof artistName !== "string") {
+            return dberrors_1.Errors.badRequest(res, 'album');
+        }
+        try {
+            const albums = await prisma.album.findMany({
+                where: {
+                    artists: {
+                        some: {
+                            artist_name: {
+                                contains: artistName
+                            }
+                        }
+                    }
+                }
+            });
+            res.send({ message: `Albums by '${artistName}' retrieved successfully`, albums });
+        }
+        catch (error) {
+            (0, error_guard_1.assertIsError)(error);
+            return dberrors_1.Errors.couldNotRetrieve(res, 'album', error);
+        }
+    }
+    async getOne(req, res) {
+        const id = req.params.catalogNumber;
+        try {
+            const album = await prisma.album.findUnique({
+                where: {
+                    catalog_number: id
+                }
+            });
+            if (!album) {
+                return dberrors_1.Errors.notFound(res, 'album');
+            }
+            res.send({ message: `Album '${album.album_name}'retrieved successfully`, album });
+        }
+        catch (error) {
+            (0, error_guard_1.assertIsError)(error);
+            return dberrors_1.Errors.couldNotRetrieve(res, 'album', error);
+        }
+    }
     //endregion
     //region Post
-    static create = post_album_1.postAlbum;
+    async create(req, res) {
+        if (!req.body.catalog_number) {
+            return dberrors_1.Errors.badRequest(res, 'album');
+        }
+        const albumBody = req.body;
+        try {
+            const album = await prisma.album.create({
+                data: albumBody
+            });
+            res.send({ message: "Album created successfully", album });
+        }
+        catch (error) {
+            (0, error_guard_1.assertIsError)(error);
+            return dberrors_1.Errors.couldNotCreate(res, 'album', error);
+        }
+    }
     //endregion
     //region Put
-    static update = put_updateAlbum_1.updateAlbum;
+    async update(req, res) {
+        if (!req.body) {
+            return dberrors_1.Errors.badRequest(res, 'album');
+        }
+        const catNumber = req.params.catalogNumber;
+        try {
+            const album = await prisma.album.update({
+                where: {
+                    catalog_number: catNumber
+                },
+                data: req.body
+            });
+            res.send({ message: "Album updated successfully", album });
+        }
+        catch (error) {
+            (0, error_guard_1.assertIsError)(error);
+            return dberrors_1.Errors.couldNotUpdate(res, 'album', error);
+        }
+    }
     //endregion
     //region Delete
-    static deleteOne = delete_album_1.deleteAlbum;
-    static deleteMany = delete_manyAlbums_1.deleteAlbums;
+    async deleteOne(req, res) {
+        const catNumber = req.params.catalogNumber;
+        try {
+            const album = await prisma.album.delete({
+                where: {
+                    catalog_number: catNumber
+                }
+            });
+            res.send({ message: `Album '${catNumber}' deleted successfully`, album });
+        }
+        catch (error) {
+            (0, error_guard_1.assertIsError)(error);
+            dberrors_1.Errors.couldNotDelete(res, 'album', error);
+        }
+    }
+    async deleteMany(req, res) {
+        const catalogNumbers = req.query.catalogNumbers;
+        if (!Array.isArray(catalogNumbers)) {
+            return dberrors_1.Errors.badRequest(res, 'album');
+        }
+        try {
+            const albums = await prisma.album.deleteMany({
+                where: {
+                    catalog_number: {
+                        in: catalogNumbers
+                    }
+                }
+            });
+            res.send({ message: `Albums deleted successfully`, albums });
+        }
+        catch (error) {
+            (0, error_guard_1.assertIsError)(error);
+            dberrors_1.Errors.couldNotDelete(res, 'album', error);
+        }
+    }
 }
 exports.default = AlbumsController;

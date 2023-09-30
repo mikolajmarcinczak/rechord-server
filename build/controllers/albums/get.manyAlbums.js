@@ -60,7 +60,7 @@ async function getManyAlbums(req, res) {
 }
 exports.getManyAlbums = getManyAlbums;
 async function getAlbumsByArtist(req, res) {
-    const artistName = req.body.artistName;
+    const artistName = req.query.artistName;
     if (artistName === "" || typeof artistName !== "string") {
         return dberrors_1.Errors.badRequest(res, 'album');
     }

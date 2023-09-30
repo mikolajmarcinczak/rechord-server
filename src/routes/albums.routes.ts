@@ -4,6 +4,7 @@ import AlbumsController from "../controllers/albums.controller";
 
 class AlbumsRoutes implements IRoutes {
 	router = Router();
+	controller = new AlbumsController();
 
 	constructor() {
 		//this.initRoutes();
@@ -11,17 +12,20 @@ class AlbumsRoutes implements IRoutes {
 
 	initRoutes()
 	{
-		this.router.get('/', AlbumsController.getMany);
-		this.router.get('/:artistName', AlbumsController.getManyByArtist);
-		this.router.get('/:albumName', AlbumsController.getManyByName);
-		this.router.get('/:catalogNumber', AlbumsController.getOne);
+		 //TODO: do wyniesienia do Artist.Routes
+		this.router.get('/:artistName', this.controller.getManyByArtist);
 
-		this.router.post('/', AlbumsController.create);
+		this.router.get('/', this.controller.getMany);
+		this.router.get('/?albumName', this.controller.getManyByName);
+		this.router.get('/:catalogNumber', this.controller.getOne);
 
-		this.router.put('/:catalogNumber', AlbumsController.update);
+		this.router.post('/', this.controller.create);
 
-		this.router.delete('/:catalogNumber', AlbumsController.deleteOne);
-		this.router.delete('/', AlbumsController.deleteMany);
+		this.router.put('/:catalogNumber', this.controller.update);
+
+		this.router.delete('/:catalogNumber', this.controller.deleteOne);
+		this.router.delete('/', this.controller.deleteMany);
 	}
 }
+
 export default new AlbumsRoutes().router;
