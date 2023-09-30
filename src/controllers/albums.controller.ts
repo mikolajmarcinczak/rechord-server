@@ -1,26 +1,24 @@
-import {PrismaClient} from "@prisma/client";
+import {prisma} from "../utility/database";
 import {Request, Response} from "express";
 import {Errors} from "../utility/dberrors";
 import {assertIsError} from "../utility/error.guard";
-
-const prisma = new PrismaClient();
 
 export default class AlbumsController {
 	//region Get
 	async getMany(req: Request, res: Response) {
 		const catalogNumbers = req.query.catalogNumbers as string[];
-
-		if (!Array.isArray(catalogNumbers)) {
-			return Errors.badRequest(res, 'album');
-		}
-
 		try {
-			const albums = await prisma.album.findMany({
-				where: {
+			let whereClause = {};
+
+			if (Array.isArray(catalogNumbers) && catalogNumbers.length > 0) {
+				whereClause = {
 					catalog_number: {
 						in: catalogNumbers
 					}
-				}
+				};
+			}
+			const albums = await prisma.album.findMany({
+				where: whereClause
 			});
 			res.send({message: "Albums retrieved successfully", albums});
 		} catch (error: unknown) {
@@ -30,7 +28,7 @@ export default class AlbumsController {
 	}
 
 	async getManyByName(req: Request, res: Response) {
-		const albumName = req.query.albumName as string;
+		const albumName = req.query.album_name as string;
 
 		if (albumName === "") {
 			try {
@@ -62,7 +60,7 @@ export default class AlbumsController {
 	}
 
 	async getManyByArtist(req: Request, res: Response) {
-		const artistName = req.query.artistName as string;
+		const artistName = req.query.artist_name as string;
 
 		if (artistName === "" || typeof artistName !== "string") {
 			return Errors.badRequest(res, 'album');
@@ -88,7 +86,7 @@ export default class AlbumsController {
 	}
 
 	async getOne(req: Request, res: Response) {
-		const id = req.params.catalogNumber;
+		const id = req.params.catalog_number;
 
 		try {
 			const album = await prisma.album.findUnique({
@@ -172,7 +170,7 @@ export default class AlbumsController {
 	}
 
 	async deleteMany(req: Request, res: Response){
-		const catalogNumbers = req.query.catalogNumbers as string[];
+		const catalogNumbers = req.body.catalog_numbers as string[];
 
 		if (!Array.isArray(catalogNumbers)) {
 			return Errors.badRequest(res, 'album');
