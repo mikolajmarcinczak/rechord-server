@@ -4,7 +4,7 @@ import {Errors} from "../utility/dberrors";
 import {assertIsError} from "../utility/error.guard";
 
 export default class AlbumsController {
-	
+
 	//region Get
 	async getMany(req: Request, res: Response) {
 		const catalogNumbers = req.query.catalogNumbers as string[];
@@ -134,7 +134,7 @@ export default class AlbumsController {
 			return Errors.badRequest(res, 'album');
 		}
 
-		const catNumber = req.params.catalogNumber;
+		const catNumber = req.body.catalogNumber;
 
 		try {
 			const album = await prisma.album.update({
