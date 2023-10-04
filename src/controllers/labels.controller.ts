@@ -9,7 +9,7 @@ export default class LabelsController {
 	async getMany(req: Request, res: Response) {
 		try {
 			const labels = await prisma.label.findMany();
-			res.send({message: "Labels retrieved successfully", labels});
+			res.status(200).send({message: "Labels retrieved successfully", labels});
 		} catch (error: unknown) {
 			assertIsError(error);
 			return Errors.couldNotRetrieve(res, 'label', error);
@@ -25,7 +25,7 @@ export default class LabelsController {
 					label_name: labelName
 				}
 			});
-			res.send({message: `Label '${labelName}' retrieved successfully`, label});
+			res.status(200).send({message: `Label '${labelName}' retrieved successfully`, label});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -44,7 +44,7 @@ export default class LabelsController {
 					}
 				}
 			});
-			res.send({message: `Albums by label '${labelName}' retrieved successfully`, albums});
+			res.status(200).send({message: `Albums by label '${labelName}' retrieved successfully`, albums});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -80,7 +80,7 @@ export default class LabelsController {
 					}
 				}
 			});
-			res.send({message: `Artists from label '${labelName}' retrieved successfully`, artists});
+			res.status(200).send({message: `Artists from label '${labelName}' retrieved successfully`, artists});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -101,7 +101,7 @@ export default class LabelsController {
 			const label = await prisma.label.create({
 				data: labelBody
 			});
-			res.send({message: "Label created successfully", label});
+			res.status(200).send({message: "Label created successfully", label});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -125,7 +125,7 @@ export default class LabelsController {
 				},
 				data: req.body
 			});
-			res.send({message: `Label updated successfully`, label});
+			res.status(200).send({message: `Label updated successfully`, label});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -144,7 +144,7 @@ export default class LabelsController {
 					label_name: labelName
 				}
 			});
-			res.send({message: `Label '${labelName}' deleted successfully`, label});
+			res.status(200).send({message: `Label '${labelName}' deleted successfully`, label});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -167,7 +167,7 @@ export default class LabelsController {
 					}
 				}
 			});
-			res.send({message: `Labels deleted successfully`, labels});
+			res.status(200).send({message: `Labels deleted successfully`, labels});
 		}
 		catch (error: unknown) {
 			assertIsError(error);

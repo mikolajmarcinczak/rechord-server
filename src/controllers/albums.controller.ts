@@ -21,7 +21,7 @@ export default class AlbumsController {
 			const albums = await prisma.album.findMany({
 				where: whereClause
 			});
-			res.send({message: "Albums retrieved successfully", albums});
+			res.status(200).send({message: "Albums retrieved successfully", albums});
 		} catch (error: unknown) {
 			assertIsError(error);
 			return Errors.couldNotRetrieve(res, 'album', error);
@@ -34,7 +34,7 @@ export default class AlbumsController {
 		if (albumName === "") {
 			try {
 				const albums = await prisma.album.findMany();
-				res.send({message: "Albums retrieved successfully", albums});
+				res.status(200).send({message: "Albums retrieved successfully", albums});
 			} catch (error: unknown) {
 				assertIsError(error);
 				return Errors.couldNotRetrieve(res, 'album', error);
@@ -52,7 +52,7 @@ export default class AlbumsController {
 						}
 					}
 				});
-				res.send({message: `Albums with name '${albumName}' retrieved successfully`, albums});
+				res.status(200).send({message: `Albums with name '${albumName}' retrieved successfully`, albums});
 			} catch (error: unknown) {
 				assertIsError(error);
 				return Errors.couldNotRetrieve(res, 'album', error);
@@ -79,7 +79,7 @@ export default class AlbumsController {
 					}
 				}
 			});
-			res.send({message: `Albums by '${artistName}' retrieved successfully`, albums});
+			res.status(200).send({message: `Albums by '${artistName}' retrieved successfully`, albums});
 		} catch (error: unknown) {
 			assertIsError(error);
 			return Errors.couldNotRetrieve(res, 'album', error);
@@ -98,7 +98,7 @@ export default class AlbumsController {
 			if (!album) {
 				return Errors.notFound(res, 'album');
 			}
-			res.send({message: `Album '${album.album_name}'retrieved successfully`, album});
+			res.status(200).send({message: `Album '${album.album_name}'retrieved successfully`, album});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -119,7 +119,7 @@ export default class AlbumsController {
 			const album = await prisma.album.create({
 				data: albumBody
 			});
-			res.send({message: "Album created successfully", album});
+			res.status(200).send({message: "Album created successfully", album});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -143,7 +143,7 @@ export default class AlbumsController {
 				},
 				data: req.body
 			});
-			res.send({message: "Album updated successfully", album});
+			res.status(200).send({message: "Album updated successfully", album});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -162,7 +162,7 @@ export default class AlbumsController {
 					catalog_number: catNumber
 				}
 			});
-			res.send({message: `Album '${catNumber}' deleted successfully`, album});
+			res.status(200).send({message: `Album '${catNumber}' deleted successfully`, album});
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -185,7 +185,7 @@ export default class AlbumsController {
 					}
 				}
 			});
-			res.send({message: `Albums deleted successfully`, albums});
+			res.status(200).send({message: `Albums deleted successfully`, albums});
 		}	catch (error: unknown) {
 			assertIsError(error);
 			Errors.couldNotDelete(res, 'album', error);
