@@ -112,7 +112,7 @@ export default class LabelsController {
 
 	//region Put
 	async update(req: Request, res: Response) {
-		if (!req.body){
+		if (!req.body) {
 			return Errors.badRequest(res, 'label');
 		}
 

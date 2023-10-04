@@ -10,9 +10,8 @@ class AlbumsRoutes implements IRoutes {
 		this.initRoutes();
 	}
 
-	initRoutes()
-	{
-		 //TODO: do wyniesienia do Artist.Routes
+	initRoutes() {
+		//TODO: do wyniesienia do Artist.Routes
 		this.router.get('/:artistName', this.controller.getManyByArtist);
 
 		this.router.get('/', this.controller.getMany);

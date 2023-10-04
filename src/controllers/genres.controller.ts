@@ -36,18 +36,29 @@ export default class GenresController {
 		const genreName = req.params.genre_name, genreStyle = req.params.genre_style;
 
 		try {
-			const genre = await prisma.genre.findUnique({
-					OR:[
-						{
-							genre_id: parseInt(genreId)
-						},
-						{
-							genre: genreName,
-							style: genreStyle
-						}
-					]
-			});
-			res.status(200).send({message: `Genre '${genreId}' retrieved successfully`, genre});
+			let genre;
+
+			if (genreId) {
+				genre = await prisma.genre.findUniqueOrThrow({
+					where: {
+						genre_id: parseInt(genreId)
+					}
+				});
+			}
+			else {
+				genre = await prisma.genre.findFirstOrThrow({
+					where: {
+						genre: genreName,
+						style: genreStyle
+					}
+				});
+			}
+			if (genre) {
+				res.status(200).send({message: `Genre '${genreId}' retrieved successfully`, genre});
+			}
+			else {
+				return Errors.notFound(res, 'genre');
+			}
 		}
 		catch (error: unknown) {
 			assertIsError(error);
@@ -55,7 +66,28 @@ export default class GenresController {
 		}
 	}
 
-	async getAlbumsByGenre(req: Request, res: Response) {}
+	async getAlbumsByGenre(req: Request, res: Response) {
+		const genreId = req.params.genre_id;
+		const genreName = await prisma.genre.findUniqueOrThrow({
+			where: {
+				genre_id: parseInt(genreId)
+			}
+		});
+		try {
+			const albums = await prisma.album.findMany({
+				where: {
+					genre: {
+						genre_id: parseInt(genreId)
+					}
+				}
+			});
+			res.status(200).send({message: `Albums in genre '${genreName}' retrieved successfully`, albums});
+		}
+		catch (error: unknown) {
+			assertIsError(error);
+			return Errors.couldNotRetrieve(res, 'album', error);
+		}
+	}
 
 	async getArtistsByGenre(req: Request, res: Response) {}
 	//endregion
