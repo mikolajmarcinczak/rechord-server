@@ -137,12 +137,11 @@ export default class GenresController {
 			return Errors.badRequest(res, 'genre');
 		}
 
+		const genreBody = req.body;
+
 		try {
 			const newGenre = await prisma.genre.create({
-				data: {
-					genre,
-					style
-				}
+				data: genreBody
 			});
 			res.status(200).send({message: `Genre '${newGenre.genre} ${newGenre.style}' created successfully`, newGenre});
 		}
@@ -154,13 +153,68 @@ export default class GenresController {
 	//endregion
 
 	//region Put
-	async update(req: Request, res: Response) {}
+	async update(req: Request, res: Response) {
+		if (!req.body) {
+			return Errors.badRequest(res, 'genre');
+		}
+
+		const genreBody = req.body;
+
+		try {
+			const genre = await prisma.genre.update({
+				where: {
+					genre_id: genreBody.genre_id
+				},
+				data: genreBody
+			});
+			res.status(200).send({message: `Genre '${genre.genre} ${genre.style}' updated successfully`, genre});
+		}
+		catch (error: unknown) {
+			assertIsError(error);
+			return Errors.couldNotUpdate(res, 'genre', error);
+		}
+	}
 	//endregion
 
 	//region Delete
-	async deleteMany(req: Request, res: Response) {}
+	async deleteOne(req: Request, res: Response) {
+		const genreId = req.params.genre_id;
 
-	async deleteOne(req: Request, res: Response) {}
+		try {
+			const genre = await prisma.genre.delete({
+				where: {
+					genre_id: parseInt(genreId)
+				}
+			});
+			res.status(200).send({message: `Genre '${genre.genre} ${genre.style}' deleted successfully`, genre});
+		}
+		catch (error: unknown) {
+			assertIsError(error);
+			return Errors.couldNotDelete(res, 'genre', error);
+		}
+	}
+
+	async deleteMany(req: Request, res: Response) {
+		const genreIds = req.body.genre_ids as number[];
+
+		if (!Array.isArray(genreIds)) {
+			return Errors.badRequest(res, 'genre');
+		}
+
+		try {
+			const genres = await prisma.genre.deleteMany({
+				where: {
+					genre_id: {
+						in: genreIds
+					}
+				}
+			});
+			res.status(200).send({message: `Genres deleted successfully`, genres});
+		}
+		catch (error: unknown) {
+			assertIsError(error);
+			return Errors.couldNotDelete(res, 'genre', error);
+		}
+	}
 	//endregion
-
 }
