@@ -23,3 +23,5 @@ class ArtistsRoutes implements IRoutes {
     this.router.delete('/', this.controller.deleteMany);
   }
 }
+
+export default new ArtistsRoutes().router;
