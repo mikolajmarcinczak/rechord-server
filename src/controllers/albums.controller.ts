@@ -63,7 +63,7 @@ export default class AlbumsController {
 	async getManyByArtist(req: Request, res: Response) {
 		const artistName = req.query.artist_name as string;
 
-		if (artistName === "" || typeof artistName !== "string") {
+		if (artistName === "") {
 			return Errors.badRequest(res, 'album');
 		}
 
@@ -130,11 +130,12 @@ export default class AlbumsController {
 
 	//region Put
 	async update(req: Request, res: Response){
-		if (!req.body) {
+		const albumBody = req.body;
+		if (Object.keys(albumBody).length === 0) {
 			return Errors.badRequest(res, 'album');
 		}
 
-		const catNumber = req.body.catalogNumber;
+		const catNumber = req.body.catalog_number;
 
 		try {
 			const album = await prisma.album.update({

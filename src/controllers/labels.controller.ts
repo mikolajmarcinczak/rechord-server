@@ -112,18 +112,19 @@ export default class LabelsController {
 
 	//region Put
 	async update(req: Request, res: Response) {
-		if (!req.body) {
+		const labelBody = req.body;
+		if (Object.keys(labelBody).length === 0) {
 			return Errors.badRequest(res, 'label');
 		}
 
-		const labelName = req.body.label_name;
+		const labelName = req.params.label_name;
 
 		try {
 			const label = await prisma.label.update({
 				where: {
 					label_name: labelName
 				},
-				data: req.body
+				data: labelBody
 			});
 			res.status(200).send({message: `Label updated successfully`, label});
 		}

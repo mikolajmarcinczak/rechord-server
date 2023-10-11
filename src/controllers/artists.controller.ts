@@ -97,12 +97,12 @@ export default class ArtistsController {
   //region Put
   async update(req: Request, res: Response) {
     const artistName = req.params.artist_name;
-
-    if (!req.body) {
-      return Errors.badRequest(res, 'artist');
-    }
-
     const artistBody = req.body;
+
+    if (Object.keys(artistBody).length == 0) {
+      return Errors.badRequest(res, 'artist');
+
+    }
 
     try {
       const artist = await prisma.artist.update({

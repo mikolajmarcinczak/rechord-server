@@ -154,11 +154,11 @@ export default class GenresController {
 
 	//region Put
 	async update(req: Request, res: Response) {
-		if (!req.body) {
+		const genreBody = req.body;
+
+		if (Object.keys(genreBody).length == 0) {
 			return Errors.badRequest(res, 'genre');
 		}
-
-		const genreBody = req.body;
 
 		try {
 			const genre = await prisma.genre.update({
