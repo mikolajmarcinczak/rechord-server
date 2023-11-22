@@ -87,7 +87,7 @@ export default class AlbumsController {
 	}
 
 	async getOne(req: Request, res: Response) {
-		const id = req.params.catalog_number;
+		const id = req.params.catalogNumber;
 
 		try {
 			const album = await prisma.album.findUnique({
