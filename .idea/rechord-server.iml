@@ -9,5 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="rechord" />
+    <orderEntry type="module" module-name="rechord-client" />
   </component>
 </module>

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../rechord/.idea/rechord.iml" filepath="$PROJECT_DIR$/../rechord/.idea/rechord.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../rechord-client/.idea/rechord-client.iml" filepath="$PROJECT_DIR$/../rechord-client/.idea/rechord-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/rechord-server.iml" filepath="$PROJECT_DIR$/.idea/rechord-server.iml" />
     </modules>
   </component>
